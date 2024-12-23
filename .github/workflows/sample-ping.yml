@@ -47,43 +47,43 @@ jobs:
       #      exit 1
       #     fi
           
-      # - name: Ping IP's
-      #   run: |
-      #    #  starting to ping the ips
-      #     IFS=','; for IP in $IP_LIST; do
-      #       echo "Checking connectivity to $IP by ping..."
-
-      #       if ping -c 5 "$IP" ; then
-      #         echo "✅ Connectivity to $IP via ping exists."
-      #       else
-      #         echo "❌ Cannot connect to $IP via ping. Please check network/firewall settings."
-      #         ALL_SUCCESS=false
-      #       fi
-      #     done 
-
-      - name: Check Network Connectivity
+      - name: Ping IP's
         run: |
-          
-          # Initialize a variable to track failures
-          ALL_SUCCESS=true
-
-          # Split the IP_LIST into an array using IFS
+         #  starting to ping the ips
           IFS=','; for IP in $IP_LIST; do
-            echo "Checking connectivity to $IP on port 22..."
+            echo "Checking connectivity to $IP by ping..."
 
-            # Use netcat to check connectivity on port 22 (SSH)
-            if nc -z -w 5 "$IP" 22 &>/dev/null; then
-              echo "✅ Connectivity to $IP on port 22 exists."
+            if ping -c 5 "$IP" ; then
+              echo "✅ Connectivity to $IP via ping exists."
             else
-              echo "❌ Cannot connect to $IP on port 22. Please check network/firewall settings."
+              echo "❌ Cannot connect to $IP via ping. Please check network/firewall settings."
               ALL_SUCCESS=false
             fi
-          done
+          done 
 
-          # Display final result
-          if [ "$ALL_SUCCESS" = true ]; then
-            echo "✅ All IPs are reachable on port 22."
-          else
-            echo "❌ Some IPs are not reachable on port 22. Please check the connectivity."
-            exit 1
-          fi
+      # - name: Check Network Connectivity
+      #   run: |
+          
+      #     # Initialize a variable to track failures
+      #     ALL_SUCCESS=true
+
+      #     # Split the IP_LIST into an array using IFS
+      #     IFS=','; for IP in $IP_LIST; do
+      #       echo "Checking connectivity to $IP on port 22..."
+
+      #       # Use netcat to check connectivity on port 22 (SSH)
+      #       if nc -z -w 5 "$IP" 22 &>/dev/null; then
+      #         echo "✅ Connectivity to $IP on port 22 exists."
+      #       else
+      #         echo "❌ Cannot connect to $IP on port 22. Please check network/firewall settings."
+      #         ALL_SUCCESS=false
+      #       fi
+      #     done
+
+          # # Display final result
+          # if [ "$ALL_SUCCESS" = true ]; then
+          #   echo "✅ All IPs are reachable on port 22."
+          # else
+          #   echo "❌ Some IPs are not reachable on port 22. Please check the connectivity."
+          #   exit 1
+          # fi
