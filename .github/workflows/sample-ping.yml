@@ -18,7 +18,7 @@ jobs:
         
       - name : check ns-lookup
         run: |
-         nslookup google.com
+         # nslookup google.com
          ping -c 4 8.8.8.8
 
       - name: Configure Firewall Rules
