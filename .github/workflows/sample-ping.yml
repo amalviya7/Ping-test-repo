@@ -15,6 +15,7 @@ jobs:
     steps: 
       - name: Configure Firewall Rules
         run: |
+          sudo ufw enable
           sudo ufw allow out to 115.246.57.124 port 22
           sudo ufw allow out to 111.118.250.74 port 22
           sudo ufw reload
