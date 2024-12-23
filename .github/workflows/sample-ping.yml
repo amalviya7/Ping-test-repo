@@ -39,13 +39,12 @@ jobs:
         run: |
          #  starting to ping the ips
           IFS=','; for IP in $IP_LIST; do
-            echo "Checking connectivity to $IP on port 22..."
+            echo "Checking connectivity to $IP by ping..."
 
-            # Use netcat to check connectivity on port 22 (SSH)
-            if ping -c 5 "$IP" 22 &>/dev/null; then
-              echo "✅ Connectivity to $IP on port 22 exists."
+            if ping -c 5 "$IP" ; then
+              echo "✅ Connectivity to $IP via ping exists."
             else
-              echo "❌ Cannot connect to $IP on port 22. Please check network/firewall settings."
+              echo "❌ Cannot connect to $IP via ping. Please check network/firewall settings."
               ALL_SUCCESS=false
             fi
           done 
