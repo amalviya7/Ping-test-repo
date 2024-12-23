@@ -10,7 +10,7 @@ env:
 
 jobs:
   check-connectivity:
-    runs-on: ankit-gh-runner
+    runs-on: self-hosted
 
     steps: 
       - name: Check out repository
