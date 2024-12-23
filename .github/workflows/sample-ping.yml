@@ -6,7 +6,7 @@ on:
 
 env:
   ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false # Optional variable to enable Artifactory downloads
-  IP_LIST: "115.246.57.124,111.118.250.74"
+  IP_LIST: "115.246.57.124,111.118.250.74,8.8.8.8"
 
 jobs:
   check-connectivity:
