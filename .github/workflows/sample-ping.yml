@@ -13,6 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps: 
+      - name: Configure Firewall Rules
+        run: |
+          sudo ufw allow out to 115.246.57.124 port 22
+          sudo ufw allow out to 111.118.250.74 port 22
+          sudo ufw reload
+
       - name: Check out repository
         uses: actions/checkout@v3
 
@@ -28,6 +34,21 @@ jobs:
             echo "Package manager not supported. Unable to install netcat."
            exit 1
           fi
+          
+      - name: Ping IP's
+        run: |
+         #  starting to ping the ips
+          IFS=','; for IP in $IP_LIST; do
+            echo "Checking connectivity to $IP on port 22..."
+
+            # Use netcat to check connectivity on port 22 (SSH)
+            if ping -c 5 "$IP" 22 &>/dev/null; then
+              echo "✅ Connectivity to $IP on port 22 exists."
+            else
+              echo "❌ Cannot connect to $IP on port 22. Please check network/firewall settings."
+              ALL_SUCCESS=false
+            fi
+          done 
 
       - name: Check Network Connectivity
         run: |
