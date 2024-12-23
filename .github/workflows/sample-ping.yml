@@ -13,10 +13,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps: 
+      - name: Check out repository
+        uses: actions/checkout@v3
+        
+      - name : check ns-lookup
+        run: |
+         nslookup google.com
+         ping -c 4 8.8.8.8
+
       - name: Configure Firewall Rules
         run: |
           whoami
-          # check sudoer list
+          echo  "check sudoer list"
           sudo -l 
           sudo ufw enable
           # sudo ufw allow OpenSSH
@@ -25,10 +33,7 @@ jobs:
           sudo ufw reload
           sudo ufw status
           # sudo ufw show added
-
-      - name: Check out repository
-        uses: actions/checkout@v3
-
+          
       - name: Install Netcat
         run: |
           if [ -x "$(command -v apk)" ]; then
@@ -42,19 +47,19 @@ jobs:
            exit 1
           fi
           
-      - name: Ping IP's
-        run: |
-         #  starting to ping the ips
-          IFS=','; for IP in $IP_LIST; do
-            echo "Checking connectivity to $IP by ping..."
+      # - name: Ping IP's
+      #   run: |
+      #    #  starting to ping the ips
+      #     IFS=','; for IP in $IP_LIST; do
+      #       echo "Checking connectivity to $IP by ping..."
 
-            if ping -c 5 "$IP" ; then
-              echo "✅ Connectivity to $IP via ping exists."
-            else
-              echo "❌ Cannot connect to $IP via ping. Please check network/firewall settings."
-              ALL_SUCCESS=false
-            fi
-          done 
+      #       if ping -c 5 "$IP" ; then
+      #         echo "✅ Connectivity to $IP via ping exists."
+      #       else
+      #         echo "❌ Cannot connect to $IP via ping. Please check network/firewall settings."
+      #         ALL_SUCCESS=false
+      #       fi
+      #     done 
 
       - name: Check Network Connectivity
         run: |
