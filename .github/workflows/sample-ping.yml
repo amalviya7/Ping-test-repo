@@ -16,7 +16,7 @@ jobs:
       - name: Configure Firewall Rules
         run: |
           whoami
-          sudo l 
+          sudo -l 
           # sudo ufw enable
           # sudo ufw allow OpenSSH
           # sudo ufw allow out to 115.246.57.124 port 22
