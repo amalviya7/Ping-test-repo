@@ -16,12 +16,13 @@ jobs:
       - name: Configure Firewall Rules
         run: |
           whoami
+          # check sudoer list
           sudo -l 
-          # sudo ufw enable
+          sudo ufw enable
           # sudo ufw allow OpenSSH
           # sudo ufw allow out to 115.246.57.124 port 22
           # sudo ufw allow out to 111.118.250.74 port 22
-          # sudo ufw reload
+          sudo ufw reload
           sudo ufw status
           # sudo ufw show added
 
