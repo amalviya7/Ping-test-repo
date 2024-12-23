@@ -10,7 +10,7 @@ env:
 
 jobs:
   check-connectivity:
-    runs-on: ubuntu-latest
+    runs-on: ankit-gh-runner
 
     steps: 
       - name: Check out repository
