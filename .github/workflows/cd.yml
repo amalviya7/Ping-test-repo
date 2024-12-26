@@ -10,7 +10,7 @@ env:
   ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false # Optional variable to enable Artifactory downloads
 
 jobs:
-  create_image:
+  create-image:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -34,6 +34,7 @@ jobs:
           path: my-docker-image.tar
 
   download-artifact:
+    needs: create-image
     runs-on: self-hosted
 
     steps:
