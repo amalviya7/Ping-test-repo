@@ -12,7 +12,7 @@ jobs:
   check-connectivity:
     runs-on: self-hosted
     container:
-      image: my-docker-image
+      image: my-docker-image:latest
 
     steps: 
       - name: Check out repository
