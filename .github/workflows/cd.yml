@@ -1,4 +1,4 @@
-name: Ping IP 
+name: CD
 
 on:
   push:
@@ -11,6 +11,19 @@ env:
   IP_LIST: "115.246.57.124,111.118.250.74"
 
 jobs:
+  download-artifact:
+    runs-on: self hosted
+
+    steps:
+      - name: Download Docker image
+        uses: actions/download-artifact@v3
+        with:
+          name: my-docker-image
+
+      - name: Load Docker image
+        run: |
+          docker load -i my-docker-image.tar
+
   check-connectivity:
     runs-on: self-hosted
     container:
