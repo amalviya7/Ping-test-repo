@@ -37,18 +37,28 @@ jobs:
               echo "Package manager not supported. Unable to install netcat."
               exit 1
             fi
-          '
+          
+            IFS=","
+            ALL_SUCCESS=true
 
-      # - name: Ping IP's
-      #   run: |
-      #    #  starting to ping the ips
-      #     IFS=','; for IP in $IP_LIST; do
-      #       echo "Checking connectivity to $IP by ping..."
+            # Loop through each IP in IP_LIST
+            for IP in $IP_LIST; do
+              echo "Checking connectivity to $IP by ping..."
 
-      #       if ping -c 5 "$IP" ; then
-      #         echo "✅ Connectivity to $IP via ping exists."
-      #       else
-      #         echo "❌ Cannot connect to $IP via ping. Please check network/firewall settings."
-      #         ALL_SUCCESS=false
-      #       fi
-      #     done 
+              if ping -c 5 "$IP"; then
+                echo "✅ Connectivity to $IP via ping exists."
+              else
+                echo "❌ Cannot connect to $IP via ping. Please check network/firewall settings."
+                ALL_SUCCESS=false
+              fi
+            done
+
+            # Check final status
+            if [ "$ALL_SUCCESS" = true ]; then
+              echo "All IPs are reachable."
+            else
+              echo "Some IPs failed to respond to ping."
+              exit 1
+            fi
+        '
+        
