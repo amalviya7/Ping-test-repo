@@ -6,7 +6,7 @@ on:
 
 env:
   ALPINE_IMAGE_NAME: my-docker-image
-  ALPINE_BUILDER_PATH: docker/
+  ALPINE_BUILDER_PATH: ./docker/
   ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false
 
 permissions:
@@ -24,8 +24,7 @@ jobs:
       - name: working dir
         run: |
           pwd
-          ls -la
-          cd docker
+          ls -la ./
           ls -la
 
       - name: Build the Docker Alpine Image
