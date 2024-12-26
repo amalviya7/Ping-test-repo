@@ -12,86 +12,39 @@ env:
   ALPINE_BUILDER_PATH: ./docker/
 
 jobs:
-  create-image:
+  build-image:
     runs-on: self-hosted
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Build the Docker Alpine Image
+      - name: build and push a test image
         run: |
-          echo "Building the Docker image..."
-          docker build -t $ALPINE_IMAGE_NAME $ALPINE_BUILDER_PATH 
-
-      - name: check docker images
-        run: docker images
-
-      - name: Save Docker image
-        run: |
-          docker save my-docker-image:latest -o my-docker-image.tar
-
-      - name: Upload Docker image
+          cat <<EOF>> test.Dockerfile
+          FROM ubuntu:20.04
+          EOF
+          docker build -t test-image:tmp -f test.Dockerfile .
+          docker save -o /tmp/testimage.tar test-image:tmp
+      - name: Upload image as artifact
         uses: actions/upload-artifact@v3
         with:
-          name: my-docker-image
-          path: my-docker-image.tar
+          name: testimage
+          path: /tmp/testimage.tar
 
-  download-artifact:
-    needs: create-image
+  load-image:
     runs-on: self-hosted
-
+    needs: build-image
     steps:
-
-      - name: Download all workflow run artifacts
+      - name: Download image from artifact
         uses: actions/download-artifact@v3
         with:
-          name: my-docker-image
+          name: testimage
+          path: /tmp
+      - name: Load saved image
+        run: docker load < /tmp/testimage.tar
 
-      - name: Load Docker image
-        run: |
-          docker load -i my-docker-image.tar
-
-  check-docker-image:
-    needs: download-artifact
+  test-run-in-container:
     runs-on: self-hosted
+    needs: load-image
     container:
-      image: my-docker-image:latest
-
-    steps: 
-      - name: Check out repository
-        uses: actions/checkout@v3
-
-      - name: check docker images
-        run: docker images
-      
-      # - name : check ns-lookup
-      #   run: |
-      #    # nslookup google.com
-      #    ping -c 4 8.8.8.8
-          
-      # - name: Install Netcat
-      #   run: |
-      #     if [ -x "$(command -v apk)" ]; then
-      #       apk add --no-cache netcat-openbsd
-      #     elif [ -x "$(command -v apt-get)" ]; then
-      #       sudo apt-get update && sudo apt-get install -y netcat
-      #     elif [ -x "$(command -v yum)" ]; then
-      #       sudo yum install -y nc
-      #     else
-      #       echo "Package manager not supported. Unable to install netcat."
-      #      exit 1
-      #     fi
-          
-      # - name: Ping IP's
-      #   run: |
-      #    #  starting to ping the ips
-      #     IFS=','; for IP in $IP_LIST; do
-      #       echo "Checking connectivity to $IP by ping..."
-
-      #       if ping -c 5 "$IP" ; then
-      #         echo "✅ Connectivity to $IP via ping exists."
-      #       else
-      #         echo "❌ Cannot connect to $IP via ping. Please check network/firewall settings."
-      #         ALL_SUCCESS=false
-      #       fi
-      #     done 
+      image: test-image:tmp
+    steps:
+      - name: test run
+        run: echo "Test run successfully!"
