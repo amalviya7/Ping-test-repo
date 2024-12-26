@@ -11,8 +11,8 @@ env:
 jobs:
   check-connectivity:
     runs-on: self-hosted
-    # container:
-    #   image: my-docker-image
+    container:
+      image: my-docker-image
 
     steps: 
       - name: Check out repository
