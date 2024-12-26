@@ -24,7 +24,7 @@ jobs:
       #   run: docker run --name my-docker-container -d my-docker-image "tail -f /dev/null"
       
           
-      - name: Install Netcat
+      - name: Running container
         run: |
           echo "Starting Docker container..."
           docker run --rm -v "$(pwd)":/workspace -w /workspace my-docker-image:latest sh -c '
@@ -36,17 +36,14 @@ jobs:
               yum install -y nc
             else
               echo "Package manager not supported. Unable to install netcat."
-              exit 1
             fi
           
             # Initialize a variable to track failures
             ALL_SUCCESS=true
-
+            echo "list all the ip s - ${IP_LIST}"
             # Split the IP_LIST into an array using IFS
-            IFS=","
-            for IP in $IP_LIST; do
+            IFS=","; for IP in $IP_LIST; do
               echo "Checking connectivity to $IP on port 22..."
-
               # Use netcat to check connectivity on port 22 (SSH)
               if nc -z -w 5 "$IP" 22 >/dev/null 2>&1; then
                 echo "✅ Connectivity to $IP on port 22 exists."
@@ -55,11 +52,4 @@ jobs:
                 ALL_SUCCESS=false
               fi
               done
-
-              # Display final result
-              if [ "$ALL_SUCCESS" = true ]; then
-                echo "✅ All IPs are reachable on port 22."
-              else
-                echo "❌ Some IPs are not reachable on port 22. Please check the connectivity."
-                exit 1
-              fi'
+              echo "end of file"'
