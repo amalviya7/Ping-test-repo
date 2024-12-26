@@ -11,6 +11,8 @@ env:
 jobs:
   check-connectivity:
     runs-on: self-hosted
+    container:
+      image: my-docker-image
 
     steps: 
       - name: Check out repository
@@ -19,7 +21,6 @@ jobs:
       - name: check docker images
         run: docker images
       
-        
       # - name : check ns-lookup
       #   run: |
       #    # nslookup google.com
