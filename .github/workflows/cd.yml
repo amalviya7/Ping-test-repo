@@ -36,7 +36,8 @@ jobs:
   check-connectivity:
     runs-on: self-hosted
     container:
-      image: artifactory-alpine:latest
+      image: my-docker-image
+      options: --privileged
 
     steps:
       - name: Check out repository
