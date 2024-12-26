@@ -8,7 +8,6 @@ on:
 
 env:
   ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false # Optional variable to enable Artifactory downloads
-  IP_LIST: "115.246.57.124,111.118.250.74"
 
 jobs:
   download-artifact:
@@ -24,7 +23,7 @@ jobs:
         run: |
           docker load -i my-docker-image.tar
 
-  check-connectivity:
+  check-docker-image:
     needs: download-artifact
     runs-on: self-hosted
     container:
