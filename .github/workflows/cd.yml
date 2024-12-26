@@ -3,8 +3,8 @@ name: CD
 on:
   push:
     branches: [main]
-    paths:
-      - '.github/workflows/sample-ping.yml'
+    # paths:
+    #   - '.github/workflows/sample-ping.yml'
 
 env:
   ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false # Optional variable to enable Artifactory downloads
