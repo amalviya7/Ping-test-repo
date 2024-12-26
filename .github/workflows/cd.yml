@@ -54,12 +54,12 @@ jobs:
                 echo "❌ Cannot connect to $IP on port 22. Please check network/firewall settings."
                 ALL_SUCCESS=false
               fi
-            done
+              done
 
-            # Display final result
-            if [ "$ALL_SUCCESS" = true ]; then
-              echo "✅ All IPs are reachable on port 22."
-            else
-              echo "❌ Some IPs are not reachable on port 22. Please check the connectivity."
-              exit 1
-            fi'
+              # Display final result
+              if [ "$ALL_SUCCESS" = true ]; then
+                echo "✅ All IPs are reachable on port 22."
+              else
+                echo "❌ Some IPs are not reachable on port 22. Please check the connectivity."
+                exit 1
+              fi'
