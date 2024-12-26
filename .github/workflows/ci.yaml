@@ -6,7 +6,7 @@ on:
 
 env:
   ALPINE_IMAGE_NAME: my-docker-image
-  ALPINE_BUILDER_PATH: ./
+  ALPINE_BUILDER_PATH: ./dockerfile
   ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false
 
 permissions:
