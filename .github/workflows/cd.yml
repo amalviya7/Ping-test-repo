@@ -10,19 +10,42 @@ env:
   ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false # Optional variable to enable Artifactory downloads
 
 jobs:
+  create_image:
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build the Docker Alpine Image
+        run: |
+          echo "Building the Docker image..."
+          docker build -t $ALPINE_IMAGE_NAME $ALPINE_BUILDER_PATH 
+
+      - name: check docker images
+        run: docker images
+
+      - name: Save Docker image
+        run: |
+          docker save my-docker-image:latest -o my-docker-image.tar
+
+      - name: Upload Docker image
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-docker-image
+          path: my-docker-image.tar
+
   download-artifact:
     runs-on: self-hosted
 
     steps:
-      - name: check docker images
-        run: docker images
 
       - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
+        with:
+          name: my-docker-image
 
       - name: Load Docker image
         run: |
-          docker load -i my-docker-image/my-docker-image.tar
+          docker load -i my-docker-image.tar
 
   check-docker-image:
     needs: download-artifact
