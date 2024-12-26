@@ -24,7 +24,7 @@ jobs:
       - name: Build the Docker Alpine Image
         run: |
           echo "Building the Docker image..."
-          docker build -t $ALPINE_IMAGE_NAME 
+          docker build -t $ALPINE_IMAGE_NAME . 
 
       - name: check docker images
         run: docker images
