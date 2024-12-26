@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     branches: [main]
-  workflow_dispatch:
+  # workflow_dispatch:
 
 env:
   ALPINE_IMAGE_NAME: my-docker-image
@@ -41,7 +41,7 @@ permissions:
 #           path: my-docker-image.tar
 
 jobs:
-  build and deploy:
+  build-and-deploy:
     runs-on: self-hosted
     name: ci
     steps:
