@@ -10,7 +10,7 @@ env:
   ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false # Optional variable to enable Artifactory downloads
   ALPINE_IMAGE_NAME: my-docker-image
   ALPINE_BUILDER_PATH: ./docker/
-  IP_LIST: 8.8.8.8,8.8.4.4
+  IP_LIST: "20.156.185.44,20.156.185.45,20.156.185.43,20.156.185.15,10.222.201.9"
 
 jobs:
   check-connectivity:
@@ -39,25 +39,27 @@ jobs:
               exit 1
             fi
           
-            IFS=","
+            # Initialize a variable to track failures
             ALL_SUCCESS=true
 
-            # Loop through each IP in IP_LIST
+            # Split the IP_LIST into an array using IFS
+            IFS=","
             for IP in $IP_LIST; do
-              echo "Checking connectivity to $IP by ping..."
+              echo "Checking connectivity to $IP on port 22..."
 
-              if ping -c 5 "$IP"; then
-                echo "✅ Connectivity to $IP via ping exists."
+              # Use netcat to check connectivity on port 22 (SSH)
+              if nc -z -w 5 "$IP" 22 >/dev/null 2>&1; then
+                echo "✅ Connectivity to $IP on port 22 exists."
               else
-                echo "❌ Cannot connect to $IP via ping. Please check network/firewall settings."
+                echo "❌ Cannot connect to $IP on port 22. Please check network/firewall settings."
                 ALL_SUCCESS=false
               fi
             done
 
-            # Check final status
+            # Display final result
             if [ "$ALL_SUCCESS" = true ]; then
-              echo "All IPs are reachable."
+              echo "✅ All IPs are reachable on port 22."
             else
-              echo "Some IPs failed to respond to ping."
+              echo "❌ Some IPs are not reachable on port 22. Please check the connectivity."
               exit 1
             fi'
