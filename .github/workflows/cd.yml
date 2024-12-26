@@ -36,37 +36,38 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: my-docker-image
-            run: |
-          
-              if [ -x "$(command -v apk)" ]; then
-                apk add --no-cache netcat-openbsd
-              elif [ -x "$(command -v apt-get)" ]; then
-                sudo apt-get update && sudo apt-get install -y netcat
-              elif [ -x "$(command -v yum)" ]; then
-                sudo yum install -y nc
-              else
-                echo "Package manager not supported. Unable to install netcat."
-              exit 1
-              fi
+          run: |
+            
+        
+            if [ -x "$(command -v apk)" ]; then
+              apk add --no-cache netcat-openbsd
+            elif [ -x "$(command -v apt-get)" ]; then
+              sudo apt-get update && sudo apt-get install -y netcat
+            elif [ -x "$(command -v yum)" ]; then
+              sudo yum install -y nc
+            else
+              echo "Package manager not supported. Unable to install netcat."
+            exit 1
+            fi
 
-              # Initialize a variable to track failures
-              ALL_SUCCESS=true
-              # Split the IP_LIST into an array using IFS
-              IFS=','; for IP in $IP_LIST; do
-                echo "Checking connectivity to $IP on port 22..."
-                # Use netcat to check connectivity on port 22 (SSH)
-                if nc -z -w 5 "$IP" 22 &>/dev/null; then
-                  echo "✅ Connectivity to $IP on port 22 exists."
-                else
-                  echo "❌ Cannot connect to $IP on port 22. Please check network/firewall settings."
-                  ALL_SUCCESS=false
-                fi
-              done
-              # Display final result
-              if [ "$ALL_SUCCESS" = true ]; then
-                echo "✅ All IPs are reachable on port 22."
+            # Initialize a variable to track failures
+            ALL_SUCCESS=true
+            # Split the IP_LIST into an array using IFS
+            IFS=','; for IP in $IP_LIST; do
+              echo "Checking connectivity to $IP on port 22..."
+              # Use netcat to check connectivity on port 22 (SSH)
+              if nc -z -w 5 "$IP" 22 &>/dev/null; then
+                echo "✅ Connectivity to $IP on port 22 exists."
               else
-                echo "❌ Some IPs are not reachable on port 22. Please check the connectivity."
-                exit 1
+                echo "❌ Cannot connect to $IP on port 22. Please check network/firewall settings."
+                ALL_SUCCESS=false
               fi
+            done
+            # Display final result
+            if [ "$ALL_SUCCESS" = true ]; then
+              echo "✅ All IPs are reachable on port 22."
+            else
+              echo "❌ Some IPs are not reachable on port 22. Please check the connectivity."
+              exit 1
+            fi
 
