@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+
+env:
+  ALPINE_IMAGE_NAME: my-docker-image
+  ALPINE_BUILDER_PATH: ./
+  ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: ci
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build the Docker Alpine Image
+        run: |
+          echo "Building the Docker image..."
+          docker build -t $ALPINE_IMAGE_NAME $ALPINE_BUILDER_PATH
+
+      - name: check docker images
+        run: docker images
+
+      - name: Docker Login to Artifactory
+        if: env.ENABLE_DOWNLOADS_FROM_ARTIFACTORY == 'true'
+        run: |
+          echo "Logging in to Artifactory..."
+          docker login -u ${{ secrets.JFROG_USER }} -p ${{ secrets.JFROG_TOKEN }} $JFROG_REGISTRY
+
+      - name: Push Docker Image to Artifactory
+        if: env.ENABLE_DOWNLOADS_FROM_ARTIFACTORY == 'true'
+        run: |
+          echo "Pushing Docker image to Artifactory..."
+          docker push $ALPINE_IMAGE_NAME
