@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
   workflow_run:
-    workflows: ["CI"]
+    workflows: ["ci"]
     types:
       - completed
 
@@ -77,10 +77,8 @@ jobs:
             echo "❌ Some IPs are not reachable on port 22. Please check the connectivity."
             exit 1
           fi
-
-
-
  
+
       # - name: Running container
       #   run: |
       #     echo "Starting Docker container..."
