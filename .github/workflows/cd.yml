@@ -12,39 +12,55 @@ env:
   ALPINE_BUILDER_PATH: ./docker/
 
 jobs:
-  build-image:
+  check-connectivity:
+    needs: download-artifact
     runs-on: self-hosted
-    steps:
-      - name: build and push a test image
+
+    steps: 
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      # - name: run docker container
+      #   run: docker run --name my-docker-container -d my-docker-image "tail -f /dev/null"
+      
+          
+      # - name: Install Netcat
+      #   run: |
+      #     if [ -x "$(command -v apk)" ]; then
+      #       apk add --no-cache netcat-openbsd
+      #     elif [ -x "$(command -v apt-get)" ]; then
+      #       sudo apt-get update && sudo apt-get install -y netcat
+      #     elif [ -x "$(command -v yum)" ]; then
+      #       sudo yum install -y nc
+      #     else
+      #       echo "Package manager not supported. Unable to install netcat."
+      #      exit 1
+      #     fi
+      - name: Install Netcat
         run: |
-          cat <<EOF>> test.Dockerfile
-          FROM ubuntu:20.04
-          EOF
-          docker build -t test-image:tmp -f test.Dockerfile .
-          docker save -o /tmp/testimage.tar test-image:tmp
-      - name: Upload image as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: testimage
-          path: /tmp/testimage.tar
+          echo "Starting Docker container..."
+          docker run --rm -v "$(pwd)":/workspace -w /workspace my-docker-image:latest bash -c "
+            if [ -x "$(command -v apk)" ]; then
+              apk add --no-cache netcat-openbsd
+            elif [ -x "$(command -v apt-get)" ]; then
+              sudo apt-get update && sudo apt-get install -y netcat
+            elif [ -x "$(command -v yum)" ]; then
+              sudo yum install -y nc
+            else
+              echo "Package manager not supported. Unable to install netcat."
+            exit 1
+            fi
+          "
+      # - name: Ping IP's
+      #   run: |
+      #    #  starting to ping the ips
+      #     IFS=','; for IP in $IP_LIST; do
+      #       echo "Checking connectivity to $IP by ping..."
 
-  load-image:
-    runs-on: self-hosted
-    needs: build-image
-    steps:
-      - name: Download image from artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: testimage
-          path: /tmp
-      - name: Load saved image
-        run: docker load < /tmp/testimage.tar
-
-  test-run-in-container:
-    runs-on: self-hosted
-    needs: load-image
-    container:
-      image: test-image:tmp
-    steps:
-      - name: test run
-        run: echo "Test run successfully!"
+      #       if ping -c 5 "$IP" ; then
+      #         echo "✅ Connectivity to $IP via ping exists."
+      #       else
+      #         echo "❌ Cannot connect to $IP via ping. Please check network/firewall settings."
+      #         ALL_SUCCESS=false
+      #       fi
+      #     done 
