@@ -25,6 +25,7 @@ jobs:
           docker load -i my-docker-image.tar
 
   check-connectivity:
+    needs: download-artifact
     runs-on: self-hosted
     container:
       image: my-docker-image:latest
