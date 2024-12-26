@@ -17,14 +17,12 @@ jobs:
       - name: check docker images
         run: docker images
 
-      - name: Download Docker image
-        uses: actions/download-artifact@v3
-        with:
-          name: my-docker-image
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4
 
       - name: Load Docker image
         run: |
-          docker load -i my-docker-image.tar
+          docker load -i my-docker-image/my-docker-image.tar
 
   check-docker-image:
     needs: download-artifact
