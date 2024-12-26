@@ -21,6 +21,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: working dir
+        run: |
+          pwd
+          ls -la
+          cd .
+
       - name: Build the Docker Alpine Image
         run: |
           echo "Building the Docker image..."
