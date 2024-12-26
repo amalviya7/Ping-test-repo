@@ -10,21 +10,21 @@ env:
   ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false # Optional variable to enable Artifactory downloads
 
 jobs:
-  # download-artifact:
-  #   runs-on: self hosted
+  download-artifact:
+    runs-on: self hosted
 
-  #   steps:
-  #     - name: check docker images
-  #       run: docker images
+    steps:
+      - name: check docker images
+        run: docker images
 
-  #     - name: Download Docker image
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: my-docker-image
+      # - name: Download Docker image
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: my-docker-image
 
-  #     - name: Load Docker image
-  #       run: |
-  #         docker load -i my-docker-image.tar
+      # - name: Load Docker image
+      #   run: |
+      #     docker load -i my-docker-image.tar
 
   check-docker-image:
     # needs: download-artifact
