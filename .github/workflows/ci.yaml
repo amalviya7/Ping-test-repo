@@ -54,6 +54,8 @@ jobs:
       - name: Build and export
         uses: docker/build-push-action@v6
         with:
+          context: ./docker  # Specify the path to the Docker build context
+          file: ./docker/Dockerfile
           tags: my-docker-image:latest
           outputs: type=docker,dest=/tmp/my-docker-image.tar
 
