@@ -8,7 +8,10 @@ on:
 
 env:
   ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false # Optional variable to enable Artifactory downloads
-
+  ALPINE_IMAGE_NAME: my-docker-image
+  ALPINE_BUILDER_PATH: ./docker/
+  ENABLE_DOWNLOADS_FROM_ARTIFACTORY: false
+  
 jobs:
   create-image:
     runs-on: self-hosted
