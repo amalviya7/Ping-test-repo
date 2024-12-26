@@ -30,7 +30,7 @@ jobs:
         run: docker images
 
   check-connectivity:
-    needs: load-image
+    needs: check-image
     runs-on: self-hosted
     # container:
     #   image: my-docker-image
