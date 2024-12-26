@@ -11,7 +11,7 @@ env:
 
 jobs:
   download-artifact:
-    runs-on: self hosted
+    runs-on: self-hosted
 
     steps:
       - name: check docker images
@@ -27,7 +27,7 @@ jobs:
       #     docker load -i my-docker-image.tar
 
   check-docker-image:
-    # needs: download-artifact
+    needs: download-artifact
     runs-on: self-hosted
     container:
       image: my-docker-image:latest
